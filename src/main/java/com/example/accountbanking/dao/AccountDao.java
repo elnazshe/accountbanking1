@@ -10,8 +10,9 @@ import java.util.List;
 
 public interface AccountDao extends JpaRepository<Account, Integer> {
 
-    @Query("select a from Account a")
+    @Query("select a from Account a ")
     List<Account> getAllAccount ();
+
 
     @Query ("select a from Account a where a.accountNumber =:accountNumber")
     Account getAccountByNumber (@Param("accountNumber") String accountNumber);

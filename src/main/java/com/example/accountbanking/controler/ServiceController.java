@@ -6,6 +6,7 @@ import com.example.accountbanking.dao.RealCostumerDao;
 import com.example.accountbanking.dto.*;
 import com.example.accountbanking.dto.ResponseStatus;
 import com.example.accountbanking.entity.Account;
+import com.example.accountbanking.entity.AccountTransaction;
 import com.example.accountbanking.entity.LegalCostumer;
 import com.example.accountbanking.entity.RealCostumer;
 import org.springframework.core.io.ClassPathResource;
@@ -19,10 +20,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @RestController
 public class ServiceController {
@@ -66,11 +64,17 @@ public class ServiceController {
         return new ResponseDto(ResponseStatus.Ok, readFile(name, StandardCharsets.UTF_8), null, null);
 
     }
+
     @RequestMapping(value = "/ws/deposit", method = RequestMethod.POST)
     @Transactional(rollbackOn = Exception.class)
     public ResponseDto<String> deposit(@RequestBody MoneyTransferDto moneyTransferDto) {
-        Account accountSource =accountDao.getAccountByNumber(moneyTransferDto.getSource());
+        Account accountSource = accountDao.getAccountByNumber(moneyTransferDto.getSource());
         accountSource.setAmount(accountSource.getAmount().add(moneyTransferDto.getAmount()));
+        for (AccountTransaction accountTransaction : accountSource.getAccountTransactionList()) {
+            accountTransaction.setAccountTransferType(AccountTransferType.DEPOSIT);
+            accountTransaction.setAmount(accountSource.getAmount());
+            accountTransaction.setTransactionDate(new Date());
+        }
         accountDao.save(accountSource);
         if (Objects.isNull((accountSource)) || Objects.isNull(moneyTransferDto))
             return new ResponseDto(ResponseStatus.Error, "", "", new ResponseException("اطلاعات کامل نمی باشد"));
@@ -81,15 +85,21 @@ public class ServiceController {
     @RequestMapping(value = "/ws/take", method = RequestMethod.POST)
     @Transactional(rollbackOn = Exception.class)
     public ResponseDto<String> take(@RequestBody MoneyTransferDto moneyTransferDto) {
-        Account accountSource =accountDao.getAccountByNumber(moneyTransferDto.getSource());
+        Account accountSource = accountDao.getAccountByNumber(moneyTransferDto.getSource());
         accountSource.setAmount(accountSource.getAmount().subtract(moneyTransferDto.getAmount()));
+
+        for (AccountTransaction accountTransaction : accountSource.getAccountTransactionList()) {
+            accountTransaction.setAccountTransferType(AccountTransferType.TAKE);
+            accountTransaction.setAmount(accountSource.getAmount());
+            accountTransaction.setTransactionDate(new Date());
+        }
         accountDao.save(accountSource);
         if (Objects.isNull((accountSource)) || Objects.isNull(moneyTransferDto))
             return new ResponseDto(ResponseStatus.Error, "", "", new ResponseException("اطلاعات کامل نمی باشد"));
         if (moneyTransferDto.getAmount().compareTo(accountSource.getAmount()) > 0 || moneyTransferDto.getAmount().compareTo(BigDecimal.ZERO) < 0)
             return new ResponseDto(ResponseStatus.Error, "", "", new ResponseException("موجودی کافی نمی باشد"));
 
-            return new ResponseDto(ResponseStatus.Ok, null, "وجه برداشت شد", null);
+        return new ResponseDto(ResponseStatus.Ok, null, "وجه برداشت شد", null);
     }
 
     @RequestMapping(value = "/ws/transfer", method = RequestMethod.POST)
@@ -97,9 +107,22 @@ public class ServiceController {
     public ResponseDto<String> transfer(@RequestBody MoneyTransferDto moneyTransferDto) {
         Account accountSource = accountDao.getAccountByNumber(moneyTransferDto.getSource());
         accountSource.setAmount(accountSource.getAmount().subtract(moneyTransferDto.getAmount()));
+
+        for (AccountTransaction accountTransaction : accountSource.getAccountTransactionList()) {
+            accountTransaction.setAccountTransferType(AccountTransferType.TAKE);
+            accountTransaction.setAmount(accountSource.getAmount());
+            accountTransaction.setTransactionDate(new Date());
+        }
         accountDao.save(accountSource);
+
         Account accountDestination = accountDao.getAccountByNumber(moneyTransferDto.getDestination());
         accountDestination.setAmount(accountDestination.getAmount().add(moneyTransferDto.getAmount()));
+
+        for (AccountTransaction accountTransaction : accountDestination.getAccountTransactionList()) {
+            accountTransaction.setAccountTransferType(AccountTransferType.DEPOSIT);
+            accountTransaction.setAmount(accountDestination.getAmount());
+            accountTransaction.setTransactionDate(new Date());
+        }
         accountDao.save(accountDestination);
         if (Objects.isNull(accountDestination) || Objects.isNull(accountSource) || Objects.isNull(moneyTransferDto)) {
             return new ResponseDto(ResponseStatus.Error, "", "", new ResponseException("اطلاعات کامل نمی باشد"));
@@ -118,10 +141,11 @@ public class ServiceController {
                 Objects.isNull(legalCostumer.getAccount()))
             return new ResponseDto(ResponseStatus.Error, "", "", new ResponseException("اطلاعات کامل نمی باشد"));
         for (Account account : legalCostumer.getAccount()) {
-            if (account.getAccountNumber().length()<16 && account.getAccountNumber().length()> 19)
-               return new ResponseDto(ResponseStatus.Error, "", "", new ResponseException("شماره کارت اشتباه می باشد"));
+            if (account.getAccountNumber().length() < 16 && account.getAccountNumber().length() > 19)
+                return new ResponseDto(ResponseStatus.Error, "", "", new ResponseException("شماره کارت اشتباه می باشد"));
         }
-            legalCostumerDao.save(legalCostumer);
+        legalCostumer.setDeleted(false);
+        legalCostumerDao.save(legalCostumer);
         return new ResponseDto(ResponseStatus.Ok, legalCostumer.getCompanyNumber(), "اطلاعات ذخیره شد.", null);
     }
 
@@ -131,8 +155,9 @@ public class ServiceController {
         if (Objects.isNull(realCostumer.getName()) || Objects.isNull(realCostumer.getLastName())
                 || Objects.isNull(realCostumer.getNationalCode()))
             return new ResponseDto(ResponseStatus.Error, "", "", new ResponseException("اطلاعات کامل نمی باشد"));
-        if (realCostumer.getNationalCode().length()<16)
-            return  new ResponseDto(ResponseStatus.Error, "", "", new ResponseException("کد ملی اشتباه می باشد"));
+        if (realCostumer.getNationalCode().length() < 16)
+            return new ResponseDto(ResponseStatus.Error, "", "", new ResponseException("کد ملی اشتباه می باشد"));
+        realCostumer.setDeleted(false);
         realCostumerDao.save(realCostumer);
 
         return new ResponseDto(ResponseStatus.Ok, "", "اطلاعات ذخیره شد.", null);
@@ -178,33 +203,65 @@ public class ServiceController {
             return new ResponseDto(ResponseStatus.Error, "", "", new ResponseException("اطلاعات یافت نشد"));
         }
         return new ResponseDto(ResponseStatus.Ok, realCostumer, "", null);
+    }
+
+    @RequestMapping(value = "/ws/getAccountByNumber", method = RequestMethod.POST)
+    @Transactional(rollbackOn = Exception.class)
+    public ResponseDto<Account> getAccountByNumber(@RequestParam String accountNumber) {
+        Account account = accountDao.getAccountByNumber(accountNumber);
+        if (Objects.isNull(account))
+            return new ResponseDto(ResponseStatus.Error, "", "", new ResponseException("اطلاعات یافت نشد"));
+        return new ResponseDto(ResponseStatus.Ok, account, "", null);
 
     }
 
 
-    @Scheduled(cron = "0 0 0 * * ?") //Every day at midnight - 12am
+    @RequestMapping(value = "/ws/deleteReal", method = RequestMethod.POST)
+    @Transactional(rollbackOn = Exception.class)
+    public ResponseDto<String> deleteReal(@RequestBody RealCostumer realCostumer) {
+        realCostumer.setDeleted(true);
+        realCostumerDao.save(realCostumer);
+        return new ResponseDto(ResponseStatus.Ok, "", "حذف با موفقیت انجام شد", null);
+
+    }
+
+    @RequestMapping(value = "/ws/deleteLegal", method = RequestMethod.POST)
+    @Transactional(rollbackOn = Exception.class)
+    public ResponseDto<String> deleteLegal(@RequestBody LegalCostumer legalCostumer) {
+        legalCostumer.setDeleted(true);
+        legalCostumerDao.save(legalCostumer);
+        return new ResponseDto(ResponseStatus.Ok, "", "حذف با موفقیت انجام شد", null);
+
+    }
+
+    @RequestMapping(value = "/ws/calculateDaily", method = RequestMethod.POST)
+    @Transactional(rollbackOn = Exception.class)
+   // @Scheduled(cron = "0 0 0 * * ?") //Every day at midnight - 12am
     public void calculateDaily() {
         List<Account> accountList = accountDao.getAllAccount();
+
         for (Account account : accountList) {
-            account.setBenefit((account.getAmount().multiply(new BigDecimal(account.getRate())).divide(new BigDecimal(365))).add(account.getBenefit()));//.multiply(new BigDecimal(30))
+          BigDecimal minAmount=  account.getAccountTransactionList().stream()
+                  .map(AccountTransaction::getAmount)
+                  .min(Comparator.naturalOrder())
+                  .orElse(BigDecimal.ZERO);
+            account.setBenefit((minAmount.multiply(new BigDecimal(account.getRate() / 100)).divide(new BigDecimal(365))).add(account.getBenefit()));//.multiply(new BigDecimal(30))
             accountDao.save(account);
         }
 
-
     }
 
-    @Scheduled(cron = "0 0 12 1 * ?") //Every month on the 1st, at noon
-
-    public void calculate() {
+    @RequestMapping(value = "/ws/calculateInterest", method = RequestMethod.POST)
+    @Transactional(rollbackOn = Exception.class)
+    //@Scheduled(cron = "0 0 12 1 * ?") //Every month on the 1st, at noon
+    public void calculateIntrest() {
         List<Account> accountList = accountDao.getAllAccount();
         for (Account account : accountList) {
             account.setBenefit(account.getAmount().add(account.getBenefit()));
             accountDao.save(account);
         }
 
-
     }
-
 
     String readFile(String path, Charset encoding)
             throws IOException {

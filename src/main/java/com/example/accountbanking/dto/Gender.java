@@ -1,4 +1,4 @@
-package com.example.accountbanking;
+package com.example.accountbanking.dto;
 
 public enum  Gender {
     FEMALE , MALE , OTHER;

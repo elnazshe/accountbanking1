@@ -55,8 +55,13 @@
             </comboBox>
         </table>
         <actions>
-            <button label="تایید">
+            <button label="به روز رسانی">
                 <webService address="ws/addLegal" clearPageOnSuccess="true" >
+                    <webServiceInputObject name="obj"/>
+                </webService>
+            </button>
+            <button label="حدف">
+                <webService address="ws/deleteLegal" clearPageOnSuccess="true" >
                     <webServiceInputObject name="obj"/>
                 </webService>
             </button>

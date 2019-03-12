@@ -18,10 +18,12 @@ public class LegalCostumer extends Costumer {
     private Long id;
     private String companyNumber;
     private String companyTpe;
-    //    @DateTimeFormat
-    private String registrationDate;
+    @DateTimeFormat
+    private Date registrationDate;
     @Version
     private Integer version;
+    private Boolean isDeleted;
+
 
     public Long getId() {
         return id;
@@ -48,12 +50,20 @@ public class LegalCostumer extends Costumer {
         this.companyTpe = companyTpe;
     }
 
-    public String getRegistrationDate() {
+    public Date getRegistrationDate() {
         return registrationDate;
     }
 
-    public void setRegistrationDate(String registrationDate) {
+    public void setRegistrationDate(Date registrationDate) {
         this.registrationDate = registrationDate;
+    }
+
+    public Boolean getDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
     }
 
     public Integer getVersion() {

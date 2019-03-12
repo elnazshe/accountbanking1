@@ -1,8 +1,7 @@
 package com.example.accountbanking.entity;
 
 
-import com.example.accountbanking.PhoneType;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import com.example.accountbanking.dto.PhoneType;
 
 import javax.persistence.*;
 

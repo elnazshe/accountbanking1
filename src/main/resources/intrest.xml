@@ -5,8 +5,13 @@
         <input label="مبلغ:" type="text" value="obj.amount"/>
 
         <actions>
-            <button label="تایید">
-                <webService address="ws/take" clearPageOnSuccess="true" >
+            <button label="روزانه">
+                <webService address="ws/calculateDaily" clearPageOnSuccess="true" >
+                    <webServiceInputObject name="obj"/>
+                </webService>
+            </button>
+            <button label="ماهانه">
+                <webService address="ws/calculateInterest" clearPageOnSuccess="true" >
                     <webServiceInputObject name="obj"/>
                 </webService>
             </button>

@@ -1,14 +1,10 @@
 package com.example.accountbanking.entity;
 
-import com.example.accountbanking.Gender;
-import com.example.accountbanking.entity.Account;
-import com.example.accountbanking.entity.Costumer;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import com.example.accountbanking.dto.Gender;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 
 
 @Entity
@@ -20,11 +16,13 @@ public class RealCostumer extends Costumer {
     private Long id;
     private Gender gender;
 
-    // @DateTimeFormat
-    private String birthDate;
+    @DateTimeFormat
+    private Date birthDate;
     private String nationalCode;
     @Version
     private Integer version;
+    private Boolean isDeleted;
+
 
     public Long getId() {
         return id;
@@ -43,12 +41,20 @@ public class RealCostumer extends Costumer {
         this.gender = gender;
     }
 
-    public String getBirthDate() {
+    public Date getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(String birthDate) {
+    public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
+    }
+
+    public Boolean getDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
     }
 
     public String getNationalCode() {

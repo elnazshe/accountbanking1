@@ -1,11 +1,11 @@
 package com.example.accountbanking.entity;
 
 
-import com.example.accountbanking.AccountType;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import com.example.accountbanking.dto.AccountType;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 public class Account {
@@ -17,6 +17,8 @@ public class Account {
     private AccountType accountType;
     private Double rate;
     private BigDecimal benefit;
+    @OneToMany
+    private List<AccountTransaction> accountTransactionList;
     @Version
     private Integer version;
 
@@ -74,6 +76,14 @@ public class Account {
 
     public void setBenefit(BigDecimal benefit) {
         this.benefit = benefit;
+    }
+
+    public List<AccountTransaction> getAccountTransactionList() {
+        return accountTransactionList;
+    }
+
+    public void setAccountTransactionList(List<AccountTransaction> accountTransactionList) {
+        this.accountTransactionList = accountTransactionList;
     }
 }
 
