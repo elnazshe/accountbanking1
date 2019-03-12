@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<page title="انتقال وجه">
+    <section title="انتقال وجه">
+        <input label="حساب مبدا:" type="text" value="obj.source"/>
+        <input label="حساب مقصد:" type="text" value="obj.destination"/>
+        <input label="مبلغ:" type="text" value="obj.amount"/>
+
+
+        <actions>
+            <button label="تایید">
+                <webService address="ws/transfer" clearPageOnSuccess="true" >
+                    <webServiceInputObject name="obj"/>
+                </webService>
+            </button>
+        </actions>
+    </section>
+</page>

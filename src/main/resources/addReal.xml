@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<page title="ثبت حساب مشتری حقیقی">
+    <section title="مشخصات مشتری حقیقی">
+        <input label="نام :" type="text" value="obj.name"/>
+        <input label="نام خانوادگی :" type="text" value="obj.lastName"/>
+        <input label="کد ملی :" type="text" value="obj.nationalCode"/>
+        <input label="تاریخ تولد :" type="date" value="obj.birthDate"/>
+        <comboBox label="جنسیت :" value="obj.gender">
+            <comboItem itemLabel="زن" itemValue="FEMALE" />
+            <comboItem itemLabel="مرد" itemValue="MALE" />
+            <comboItem itemLabel="other" itemValue="OTHER" />
+        </comboBox>
+
+        <table label="شماره تلفن" value="obj.tell" type="editable">
+            <input label="تلفن :" type="text" value="number"/>
+            <comboBox label="نوع :" value="phoneType">
+                <comboItem itemLabel="ثابت" itemValue="CELLPHONE" />
+                <comboItem itemLabel="همراه" itemValue="TELLPHONE" />
+                <comboItem itemLabel="فکس" itemValue="FAX" />
+                <comboItem itemLabel="سایر موارد" itemValue="OTHER" />
+            </comboBox>
+        </table>
+        <table label="آدرس" value="obj.address" type="editable">
+            <input label="آدرس:" type="text" value="address"/>
+            <input label="کد پستی:" type="text" value="postalNumber"/>
+            <comboBox label="نوع:" value="addressType">
+                <comboItem itemLabel="منزل" itemValue="HOME" />
+                <comboItem itemLabel="محل کار" itemValue="WORK" />
+                <comboItem itemLabel="موارد دیگر" itemValue="OTHER" />
+            </comboBox>
+        </table>
+        <table label="اطلاعات حساب" value="obj.account" type="editable">
+            <input label="شماره حساب:" type="text" value="accountNumber"/>
+            <input label="موجودی:" type="text" value="amount"/>
+            <input label="نرخ سود:" type="text" value="rate"/>
+            <comboBox label="نوع حساب:" value="accountType">
+                <comboItem itemLabel="حساب جاری" itemValue="CURRENTACCOUNT" />
+                <comboItem itemLabel="حساب سپرده" itemValue="DEPOSITACCOUNT" />
+                <comboItem itemLabel="حساب پس انداز" itemValue="SAVINGACCOUNT" />
+                <comboItem itemLabel="سایر موارد" itemValue="OTHER" />
+            </comboBox>
+        </table>
+
+
+        <actions>
+            <button label="تایید">
+                <webService address="ws/addReal" clearPageOnSuccess="true" >
+                    <webServiceInputObject name="obj"/>
+                </webService>
+            </button>
+        </actions>
+    </section>
+</page>

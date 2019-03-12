@@ -1,0 +1,65 @@
+<?xml version="1.0" ?>
+<page title="ویرایش اطلاعات مشتریان حقوقی">
+    <section title="جستجو">
+        <search label="شماره شرکت:"
+                singleResultSearch="ws/findLegalByCompanyNumber"
+                singleResultSearchInputkey="companyNumber"
+                multiResultSearchAddress="ws/findLegal"
+                multiResultSearchInput="x"
+                selectedResultKey="companyNumber"
+                title="جستجوی پیشرفته"
+                value="obj">
+            <input label="نام" type="text" value="x.name" />
+            <input label="نوع شرکت" type="text" value="x.companyTpe" />
+            <table label="نتایج جستجو">
+                <input label="نام شرکت" type="text" value="name" />
+                <input label="نوع شرکت" type="text" value="companyTpe" />
+                <input label="شماره شرکت" type="text" value="companyNumber" />
+            </table>
+        </search>
+    </section>
+    <section title="مشخصات مشتری حقوقی">
+        <input label="نام شرکت:" type="text" value="obj.name"/>
+        <input label="شماره شرکت:" type="text" value="obj.companyNumber"/>
+        <input label="نوع شرکت:" type="text" value="obj.companyTpe"/>
+        <input label="تاریخ ثبت شرکت:" type="date" value="obj.registrationDate"/>
+
+
+        <table label="شماره تلفن" value="obj.tell" type="editable">
+            <input label="تلفن :" type="text" value="number"/>
+            <comboBox label="نوع :" value="phoneType">
+                <comboItem itemLabel="ثابت" itemValue="CELLPHONE" />
+                <comboItem itemLabel="همراه" itemValue="TELLPHONE" />
+                <comboItem itemLabel="فکس" itemValue="FAX" />
+                <comboItem itemLabel="سایر موارد" itemValue="OTHER" />
+            </comboBox>
+        </table>
+        <table label="آدرس" value="obj.address" type="editable">
+            <input label="آدرس:" type="text" value="address"/>
+            <input label="کد پستی:" type="text" value="postalNumber"/>
+            <comboBox label="نوع:" value="addressType">
+                <comboItem itemLabel="منزل" itemValue="HOME" />
+                <comboItem itemLabel="محل کار" itemValue="WORK" />
+                <comboItem itemLabel="موارد دیگر" itemValue="OTHER" />
+            </comboBox>
+        </table>
+        <table label="اطلاعات حساب" value="obj.account" type="editable">
+            <input label="شماره حساب:" type="text" value="accountNumber"/>
+            <input label="موجودی:" type="text" value="amount"/>
+            <input label="نرخ سود:" type="text" value="rate"/>
+            <comboBox label="نوع حساب:" value="accountType">
+                <comboItem itemLabel="حساب جاری" itemValue="CURRENTACCOUNT" />
+                <comboItem itemLabel="حساب سپرده" itemValue="DEPOSITACCOUNT" />
+                <comboItem itemLabel="حساب پس انداز" itemValue="SAVINGACCOUNT" />
+                <comboItem itemLabel="سایر موارد" itemValue="OTHER" />
+            </comboBox>
+        </table>
+        <actions>
+            <button label="تایید">
+                <webService address="ws/addLegal" clearPageOnSuccess="true" >
+                    <webServiceInputObject name="obj"/>
+                </webService>
+            </button>
+        </actions>
+    </section>
+</page>

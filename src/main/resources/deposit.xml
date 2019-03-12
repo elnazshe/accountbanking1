@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<page title="واریز وجه">
+    <section title="واریز وجه">
+        <input label="حساب مبدا:" type="text" value="obj.source"/>
+        <input label="مبلغ:" type="text" value="obj.amount"/>
+
+        <actions>
+            <button label="تایید">
+                <webService address="ws/deposit" clearPageOnSuccess="true" >
+                    <webServiceInputObject name="obj"/>
+                </webService>
+            </button>
+        </actions>
+    </section>
+</page>
