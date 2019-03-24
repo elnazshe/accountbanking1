@@ -17,7 +17,7 @@ public class Account {
     private AccountType accountType;
     private Double rate;
     private BigDecimal benefit;
-    @OneToMany
+    @OneToMany(cascade=CascadeType.ALL)
     private List<AccountTransaction> accountTransactionList;
     @Version
     private Integer version;

@@ -3,6 +3,7 @@ package com.example.accountbanking.controler;
 import com.example.accountbanking.dao.AccountDao;
 import com.example.accountbanking.dao.LegalCostumerDao;
 import com.example.accountbanking.dao.RealCostumerDao;
+import com.example.accountbanking.dao.TransactionDao;
 import com.example.accountbanking.dto.*;
 import com.example.accountbanking.dto.ResponseStatus;
 import com.example.accountbanking.entity.Account;
@@ -29,11 +30,13 @@ public class ServiceController {
     private LegalCostumerDao legalCostumerDao;
     private RealCostumerDao realCostumerDao;
     private AccountDao accountDao;
+    private TransactionDao transactionDao;
 
-    public ServiceController(LegalCostumerDao legalCostumerDao, RealCostumerDao realCostumerDao, AccountDao accountDao) {
+    public ServiceController(LegalCostumerDao legalCostumerDao, RealCostumerDao realCostumerDao, AccountDao accountDao, TransactionDao transactionDao) {
         this.legalCostumerDao = legalCostumerDao;
         this.realCostumerDao = realCostumerDao;
         this.accountDao = accountDao;
+        this.transactionDao = transactionDao;
     }
 
     @RequestMapping(value = "/ws/menu/getUserMenu", method = RequestMethod.POST)
@@ -68,16 +71,27 @@ public class ServiceController {
     @RequestMapping(value = "/ws/deposit", method = RequestMethod.POST)
     @Transactional(rollbackOn = Exception.class)
     public ResponseDto<String> deposit(@RequestBody MoneyTransferDto moneyTransferDto) {
+
+        AccountTransaction  accountTransaction=new AccountTransaction();
+        List<AccountTransaction>   accountTransactionList=new ArrayList<>();
         Account accountSource = accountDao.getAccountByNumber(moneyTransferDto.getSource());
+        if (Objects.isNull((accountSource)) || Objects.isNull(moneyTransferDto.getAmount()))
+        return new ResponseDto(ResponseStatus.Error, "", "",
+                new ResponseException("اطلاعات کامل نمی باشد"));
+
         accountSource.setAmount(accountSource.getAmount().add(moneyTransferDto.getAmount()));
-        for (AccountTransaction accountTransaction : accountSource.getAccountTransactionList()) {
-            accountTransaction.setAccountTransferType(AccountTransferType.DEPOSIT);
-            accountTransaction.setAmount(accountSource.getAmount());
-            accountTransaction.setTransactionDate(new Date());
-        }
-        accountDao.save(accountSource);
-        if (Objects.isNull((accountSource)) || Objects.isNull(moneyTransferDto))
-            return new ResponseDto(ResponseStatus.Error, "", "", new ResponseException("اطلاعات کامل نمی باشد"));
+
+        accountTransaction.setAccountTransferType(AccountTransferType.DEPOSIT);
+        accountTransaction.setAmount(accountSource.getAmount());
+        accountTransaction.setTransactionDate(new Date());
+        accountTransactionList.add(accountTransaction);
+
+
+
+        accountSource.setAccountTransactionList(accountTransactionList);
+       // accountDao.save(accountSource);
+
+
 
         return new ResponseDto(ResponseStatus.Ok, null, "وجه واریز شد", null);
     }
@@ -85,19 +99,28 @@ public class ServiceController {
     @RequestMapping(value = "/ws/take", method = RequestMethod.POST)
     @Transactional(rollbackOn = Exception.class)
     public ResponseDto<String> take(@RequestBody MoneyTransferDto moneyTransferDto) {
+        AccountTransaction  accountTransaction=new AccountTransaction();
+       List<AccountTransaction>   accountTransactionList=new ArrayList<>();
         Account accountSource = accountDao.getAccountByNumber(moneyTransferDto.getSource());
-        accountSource.setAmount(accountSource.getAmount().subtract(moneyTransferDto.getAmount()));
-
-        for (AccountTransaction accountTransaction : accountSource.getAccountTransactionList()) {
-            accountTransaction.setAccountTransferType(AccountTransferType.TAKE);
-            accountTransaction.setAmount(accountSource.getAmount());
-            accountTransaction.setTransactionDate(new Date());
-        }
-        accountDao.save(accountSource);
-        if (Objects.isNull((accountSource)) || Objects.isNull(moneyTransferDto))
+        if (Objects.isNull((accountSource)) || Objects.isNull(moneyTransferDto.getAmount()))
             return new ResponseDto(ResponseStatus.Error, "", "", new ResponseException("اطلاعات کامل نمی باشد"));
+
         if (moneyTransferDto.getAmount().compareTo(accountSource.getAmount()) > 0 || moneyTransferDto.getAmount().compareTo(BigDecimal.ZERO) < 0)
             return new ResponseDto(ResponseStatus.Error, "", "", new ResponseException("موجودی کافی نمی باشد"));
+
+        accountSource.setAmount(accountSource.getAmount().subtract(moneyTransferDto.getAmount()));
+
+        accountTransaction.setAccountTransferType(AccountTransferType.TAKE);
+        accountTransaction.setAmount(accountSource.getAmount());
+        accountTransaction.setTransactionDate(new Date());
+        accountTransactionList.add(accountTransaction);
+
+
+
+        accountSource.setAccountTransactionList(accountTransactionList);
+       // accountDao.save(accountSource);
+
+
 
         return new ResponseDto(ResponseStatus.Ok, null, "وجه برداشت شد", null);
     }
@@ -105,31 +128,43 @@ public class ServiceController {
     @RequestMapping(value = "/ws/transfer", method = RequestMethod.POST)
     @Transactional(rollbackOn = Exception.class)
     public ResponseDto<String> transfer(@RequestBody MoneyTransferDto moneyTransferDto) {
+
+        AccountTransaction  accountTransaction=new AccountTransaction();
+        List<AccountTransaction>   accountTransactionList=new ArrayList<>();
+
         Account accountSource = accountDao.getAccountByNumber(moneyTransferDto.getSource());
-        accountSource.setAmount(accountSource.getAmount().subtract(moneyTransferDto.getAmount()));
-
-        for (AccountTransaction accountTransaction : accountSource.getAccountTransactionList()) {
-            accountTransaction.setAccountTransferType(AccountTransferType.TAKE);
-            accountTransaction.setAmount(accountSource.getAmount());
-            accountTransaction.setTransactionDate(new Date());
-        }
-        accountDao.save(accountSource);
-
         Account accountDestination = accountDao.getAccountByNumber(moneyTransferDto.getDestination());
-        accountDestination.setAmount(accountDestination.getAmount().add(moneyTransferDto.getAmount()));
 
-        for (AccountTransaction accountTransaction : accountDestination.getAccountTransactionList()) {
-            accountTransaction.setAccountTransferType(AccountTransferType.DEPOSIT);
-            accountTransaction.setAmount(accountDestination.getAmount());
-            accountTransaction.setTransactionDate(new Date());
-        }
-        accountDao.save(accountDestination);
-        if (Objects.isNull(accountDestination) || Objects.isNull(accountSource) || Objects.isNull(moneyTransferDto)) {
+        if (Objects.isNull(accountDestination) || Objects.isNull(accountSource) || Objects.isNull(moneyTransferDto.getAmount())) {
             return new ResponseDto(ResponseStatus.Error, "", "", new ResponseException("اطلاعات کامل نمی باشد"));
         }
         if (moneyTransferDto.getAmount().compareTo(accountSource.getAmount()) > 0 || moneyTransferDto.getAmount().compareTo(BigDecimal.ZERO) < 0) {
             return new ResponseDto(ResponseStatus.Error, "", "", new ResponseException("موجودی کافی نمی باشد"));
         }
+        accountSource.setAmount(accountSource.getAmount().subtract(moneyTransferDto.getAmount()));
+
+        accountTransaction.setAccountTransferType(AccountTransferType.TAKE);
+        accountTransaction.setAmount(accountSource.getAmount());
+        accountTransaction.setTransactionDate(new Date());
+        accountTransactionList.add(accountTransaction);
+
+
+
+        accountSource.setAccountTransactionList(accountTransactionList);
+        accountDao.save(accountSource);
+
+        accountDestination.setAmount(accountDestination.getAmount().add(moneyTransferDto.getAmount()));
+
+        accountTransaction.setAccountTransferType(AccountTransferType.DEPOSIT);
+        accountTransaction.setAmount(accountSource.getAmount());
+        accountTransaction.setTransactionDate(new Date());
+        accountTransactionList.add(accountTransaction);
+
+
+
+        accountSource.setAccountTransactionList(accountTransactionList);
+       // accountDao.save(accountDestination);
+
         return new ResponseDto(ResponseStatus.Ok, null, "وجه منتقل شد", null);
     }
 
@@ -155,7 +190,7 @@ public class ServiceController {
         if (Objects.isNull(realCostumer.getName()) || Objects.isNull(realCostumer.getLastName())
                 || Objects.isNull(realCostumer.getNationalCode()))
             return new ResponseDto(ResponseStatus.Error, "", "", new ResponseException("اطلاعات کامل نمی باشد"));
-        if (realCostumer.getNationalCode().length() < 16)
+        if (realCostumer.getNationalCode().length() < 10)
             return new ResponseDto(ResponseStatus.Error, "", "", new ResponseException("کد ملی اشتباه می باشد"));
         realCostumer.setDeleted(false);
         realCostumerDao.save(realCostumer);
@@ -234,31 +269,41 @@ public class ServiceController {
 
     }
 
-    @RequestMapping(value = "/ws/calculateDaily", method = RequestMethod.POST)
+
     @Transactional(rollbackOn = Exception.class)
-   // @Scheduled(cron = "0 0 0 * * ?") //Every day at midnight - 12am
+    @RequestMapping(value = "/ws/benefit", method = RequestMethod.POST)
+    //@Scheduled(cron = "0 0 0 * * ?") //Every day at midnight - 12am
+    //@Scheduled(cron = "0 0/1 * 1/1 * ? *")
     public void calculateDaily() {
         List<Account> accountList = accountDao.getAllAccount();
-
+        BigDecimal minAmount;
         for (Account account : accountList) {
-          BigDecimal minAmount=  account.getAccountTransactionList().stream()
-                  .map(AccountTransaction::getAmount)
-                  .min(Comparator.naturalOrder())
-                  .orElse(BigDecimal.ZERO);
-            account.setBenefit((minAmount.multiply(new BigDecimal(account.getRate() / 100)).divide(new BigDecimal(365))).add(account.getBenefit()));//.multiply(new BigDecimal(30))
-            accountDao.save(account);
+            if(account.getAccountTransactionList().size()!=0) {
+                 minAmount = account.getAccountTransactionList().stream()
+                        .map(AccountTransaction::getAmount)
+                        .min(Comparator.naturalOrder())
+                        .orElse(BigDecimal.ZERO);
+            }else {
+                minAmount=account.getAmount();
+            }
+          if(account.getBenefit()!=null)
+            account.setBenefit((minAmount.multiply(new BigDecimal(account.getRate() / 36500))).add(account.getBenefit()));//.multiply(new BigDecimal(30))
+         else
+            account.setBenefit((minAmount.multiply(new BigDecimal(account.getRate() / 36500))));//.multiply(new BigDecimal(30))
+
         }
 
     }
 
-    @RequestMapping(value = "/ws/calculateInterest", method = RequestMethod.POST)
     @Transactional(rollbackOn = Exception.class)
+    @RequestMapping(value = "/ws/calculate", method = RequestMethod.POST)
     //@Scheduled(cron = "0 0 12 1 * ?") //Every month on the 1st, at noon
+    //@Scheduled(cron = "0 0 12 1 * ?")
     public void calculateIntrest() {
         List<Account> accountList = accountDao.getAllAccount();
         for (Account account : accountList) {
-            account.setBenefit(account.getAmount().add(account.getBenefit()));
-            accountDao.save(account);
+            account.setAmount(account.getAmount().add(account.getBenefit()));
+
         }
 
     }

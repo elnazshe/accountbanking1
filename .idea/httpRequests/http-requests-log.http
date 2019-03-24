@@ -1,0 +1,478 @@
+POST http://localhost:8080/ws/benefit
+Accept: */*
+Content-Type: application/json
+
+{"source": "1234567890" ,"amount": 1000}
+
+###
+
+POST http://localhost:8080/ws/benefit
+Accept: */*
+Content-Type: application/json
+
+{"source": "1234567890" ,"amount": 1000}
+
+###
+
+POST http://localhost:8080/ws/take
+Accept: */*
+Content-Type: application/json
+
+{"source": "1234567890" ,"amount": 1000}
+
+<> 2019-03-24T074942.200.json
+
+###
+
+POST http://localhost:8080/ws/addReal
+Accept: */*
+Content-Type: application/json
+
+{"name": "simin","lastName": "she" , "nationalCode": "0987654321" ,   "account": [{"accountNumber": "0987654321" ,   "amount": 7000 ,"rate": 20 }] }
+
+<> 2019-03-24T074917.200.json
+
+###
+
+POST http://localhost:8080/ws/addReal
+Accept: */*
+Content-Type: application/json
+
+{"name": "elnaz","lastName": "she" , "nationalCode": "1234567890" ,   "account": [{"accountNumber": "1234567890" ,   "amount": 5000 ,"rate": 20 }] }
+
+<> 2019-03-24T074856.200.json
+
+###
+
+POST http://localhost:8080/ws/addReal
+Accept: */*
+Content-Type: application/json
+
+{"name": "elnaz","lastName": "she" , "nationalCode": "1234567890" ,   "account": [{"accountNumber": "1234567890" ,   "amount": 5000 ,"rate": 20 }] }
+
+<> 2019-03-24T074817-1.500.html
+
+###
+
+POST http://localhost:8080/ws/addReal
+Accept: */*
+Content-Type: application/json
+
+{"name": "elnaz","lastName": "she" , "nationalCode": "1234567890" ,   "account": [{"accountNumber": "1234567890" ,   "amount": 5000 ,"rate": 20 }] }
+
+<> 2019-03-24T074817.500.html
+
+###
+
+POST http://localhost:8080/ws/addReal
+Accept: */*
+Content-Type: application/json
+
+{"name": "elnaz","lastName": "she" , "nationalCode": "1234567890" ,   "account": [{"accountNumber": "1234567890" ,   "amount": 5000 ,"rate": 20 }] }
+
+<> 2019-03-24T074815.500.html
+
+###
+
+POST http://localhost:8080/ws/benefit
+Accept: */*
+Content-Type: application/json
+
+{"name": "elnaz","lastName": "she" , "nationalCode": "1234567890" ,   "account": [{"accountNumber": "1234567890" ,   "amount": 5000 ,"rate": 20 }] }
+
+###
+
+POST http://localhost:8080/ws/benefit
+Accept: */*
+Content-Type: application/json
+
+{"source": "1234567890" ,"amount": 2000 ,"destination": "0987654321"}
+
+###
+
+POST http://localhost:8080/ws/benefit
+Accept: */*
+Content-Type: application/json
+
+{"source": "1234567890" ,"amount": 2000 ,"destination": "0987654321"}
+
+###
+
+POST http://localhost:8080/ws/benefit
+Accept: */*
+Content-Type: application/json
+
+{"source": "1234567890" ,"amount": 2000 ,"destination": "0987654321"}
+
+###
+
+POST http://localhost:8080/ws/transfer
+Accept: */*
+Content-Type: application/json
+
+{"source": "1234567890" ,"amount": 2000 ,"destination": "0987654321"}
+
+<> 2019-03-24T073604.200.json
+
+###
+
+POST http://localhost:8080/ws/deposit
+Accept: */*
+Content-Type: application/json
+
+{"source": "1234567890" ,"amount": 2000}
+
+<> 2019-03-24T073534.200.json
+
+###
+
+POST http://localhost:8080/ws/take
+Accept: */*
+Content-Type: application/json
+
+{"source": "1234567890" ,"amount": 1000}
+
+<> 2019-03-24T073511.200.json
+
+###
+
+POST http://localhost:8080/ws/addReal
+Accept: */*
+Content-Type: application/json
+
+{"name": "simin","lastName": "she" , "nationalCode": "0987654321" ,   "account": [{"accountNumber": "0987654321" ,   "amount": 7000 ,"rate": 20 }] }
+
+<> 2019-03-24T073439.200.json
+
+###
+
+POST http://localhost:8080/ws/addReal
+Accept: */*
+Content-Type: application/json
+
+{"name": "elnaz","lastName": "she" , "nationalCode": "1234567890" ,   "account": [{"accountNumber": "1234567890" ,   "amount": 5000 ,"rate": 20 }] }
+
+<> 2019-03-24T073417.200.json
+
+###
+
+POST http://localhost:8080/ws/benefit
+Accept: */*
+Content-Type: application/json
+
+{"source": "1234567890" ,"amount": 2000 ,"destination": "0987654321"}
+
+###
+
+POST http://localhost:8080/ws/take
+Accept: */*
+Content-Type: application/json
+
+{"source": "1234567890" ,"amount": 2000 ,"destination": "0987654321"}
+
+<> 2019-03-24T072712.200.json
+
+###
+
+POST http://localhost:8080/ws/calculate
+Accept: */*
+Content-Type: application/json
+
+{"source": "1234567890" ,"amount": 2000 ,"destination": "0987654321"}
+
+###
+
+POST http://localhost:8080/ws/benefit
+Accept: */*
+Content-Type: application/json
+
+{"source": "1234567890" ,"amount": 2000 ,"destination": "0987654321"}
+
+###
+
+POST http://localhost:8080/ws/transfer
+Accept: */*
+Content-Type: application/json
+
+{"source": "1234567890" ,"amount": 2000 ,"destination": "0987654321"}
+
+<> 2019-03-24T072241.200.json
+
+###
+
+POST http://localhost:8080/ws/deposit
+Accept: */*
+Content-Type: application/json
+
+{"source": "1234567890" ,"amount": 2000}
+
+<> 2019-03-24T072201.200.json
+
+###
+
+POST http://localhost:8080/ws/take
+Accept: */*
+Content-Type: application/json
+
+{"source": "1234567890" ,"amount": 1000}
+
+<> 2019-03-24T072137.200.json
+
+###
+
+POST http://localhost:8080/ws/take
+Accept: */*
+Content-Type: application/json
+
+{"name": "simin","lastName": "she" , "nationalCode": "0987654321" ,   "account": [{"accountNumber": "0987654321" ,   "amount": 7000 ,"rate": 20 }] }
+
+<> 2019-03-24T072112.200.json
+
+###
+
+POST http://localhost:8080/ws/addReal
+Accept: */*
+Content-Type: application/json
+
+{"name": "simin","lastName": "she" , "nationalCode": "0987654321" ,   "account": [{"accountNumber": "0987654321" ,   "amount": 7000 ,"rate": 20 }] }
+
+<> 2019-03-24T072059.200.json
+
+###
+
+POST http://localhost:8080/ws/addReal
+Accept: */*
+Content-Type: application/json
+
+{"name": "elnaz","lastName": "she" , "nationalCode": "1234567890" ,   "account": [{"accountNumber": "1234567890" ,   "amount": 5000 ,"rate": 20 }] }
+
+<> 2019-03-24T072039.200.json
+
+###
+
+POST http://localhost:8080/ws/findReal
+Accept: */*
+Content-Type: application/json
+
+{"name": "simin"}
+
+<> 2019-03-24T070711.500.json
+
+###
+
+POST http://localhost:8080/ws/findReal
+Accept: */*
+Content-Type: application/json
+
+{"name": "simin"}
+
+<> 2019-03-24T065054.500.json
+
+###
+
+POST http://localhost:8080/ws/deleteReal
+Accept: */*
+Content-Type: application/json
+
+{"name": "simin","lastName": "she" , "nationalCode": "0987654321" ,   "account": [{"accountNumber": "0987654321" ,   "amount": 7000 ,"rate": 20 }] ,"isDeleted":"true"}
+
+<> 2019-03-24T064843.200.json
+
+###
+
+POST http://localhost:8080/ws/addReal
+Accept: */*
+Content-Type: application/json
+
+{"name": "simin","lastName": "she" , "nationalCode": "0987654321" ,   "account": [{"accountNumber": "0987654321" ,   "amount": 7000 ,"rate": 20 }] }
+
+<> 2019-03-24T064626.200.json
+
+###
+
+POST http://localhost:8080/ws/addReal
+Accept: */*
+Content-Type: application/json
+
+{"name": "elnaz","lastName": "she" , "nationalCode": "1234567890" ,   "account": [{"accountNumber": "1234567890" ,   "amount": 5000 ,"rate": 20 }] }
+
+<> 2019-03-24T064609.200.json
+
+###
+
+POST http://localhost:8080/ws/calculate
+Accept: */*
+Content-Type: application/json
+
+{"source": "1234567890" ,"amount": 1000}
+
+###
+
+POST http://localhost:8080/ws/benefit
+Accept: */*
+Content-Type: application/json
+
+{"source": "1234567890" ,"amount": 1000}
+
+###
+
+POST http://localhost:8080/ws/take
+Accept: */*
+Content-Type: application/json
+
+{"source": "1234567890" ,"amount": 1000}
+
+<> 2019-03-24T023253.200.json
+
+###
+
+POST http://localhost:8080/ws/addReal
+Accept: */*
+Content-Type: application/json
+
+{"name": "elnaz","lastName": "she" , "nationalCode": "1234567890" ,   "account": [{"accountNumber": "1234567890" ,   "amount": 5000 ,"rate": 20 }] }
+
+<> 2019-03-24T023214.200.json
+
+###
+
+POST http://localhost:8080/ws/benefit
+Accept: */*
+Content-Type: application/json
+
+ {"source": "1234567890" ,"amount": 1000}
+
+<> 2019-03-24T022432.500.json
+
+###
+
+POST http://localhost:8080/ws/take
+Accept: */*
+Content-Type: application/json
+
+ {"source": "1234567890" ,"amount": 1000}
+
+<> 2019-03-24T022256.200.json
+
+###
+
+POST http://localhost:8080/ws/addReal
+Accept: */*
+Content-Type: application/json
+
+{"name": "elnaz","lastName": "she" , "nationalCode": "1234567890" ,   "account": [{"accountNumber": "1234567890" ,   "amount": 5000 ,"rate": 20 }] }
+
+<> 2019-03-24T022205.200.json
+
+###
+
+POST http://localhost:8080/ws/take
+Accept: */*
+Content-Type: application/json
+
+{"source": "1234567890" ,"amount": 1000}
+
+<> 2019-03-24T021728.500.json
+
+###
+
+POST http://localhost:8080/ws/addReal
+Accept: */*
+Content-Type: application/json
+
+{"name": "elnaz","lastName": "she" , "nationalCode": "1234567890" ,   "account": [{"accountNumber": "1234567890" ,   "amount": 5000 ,"rate": 20 }] }
+
+<> 2019-03-24T021639.200.json
+
+###
+
+POST http://localhost:8080/ws/take
+Accept: */*
+Content-Type: application/json
+
+{"source": "1234567890" ,"amount": 1000}
+
+<> 2019-03-24T021530.500.json
+
+###
+
+POST http://localhost:8080/ws/take
+Accept: */*
+Content-Type: application/json
+
+{"source": "1234567890" ,"amount": 1000}
+
+<> 2019-03-24T021246.500.json
+
+###
+
+POST http://localhost:8080/ws/addReal
+Accept: */*
+Content-Type: application/json
+
+{"name": "elnaz","lastName": "she" , "nationalCode": "1234567890" ,   "account": [{"accountNumber": "1234567890" ,   "amount": 5000 ,"rate": 20 }] }
+
+<> 2019-03-24T021158.200.json
+
+###
+
+POST http://localhost:8080/ws/take
+Accept: */*
+Content-Type: application/json
+
+{"source": "1234567890" ,"amount": 1000}
+
+<> 2019-03-24T020054.200.json
+
+###
+
+POST http://localhost:8080/ws/take
+Accept: */*
+Content-Type: application/json
+
+{"source": "1234567890" ,"amount": 1000}
+
+<> 2019-03-24T015923.200.json
+
+###
+
+POST http://localhost:8080/ws/take
+Accept: */*
+Content-Type: application/json
+
+{"source": "1234567890" ,"amount": 1000}
+
+<> 2019-03-24T015806.200.json
+
+###
+
+POST http://localhost:8080/ws/addReal
+Accept: */*
+Content-Type: application/json
+
+{"name": "elnaz","lastName": "she" , "nationalCode": "1234567890" ,   "account": [{"accountNumber": "1234567890" ,   "amount": 5000 ,"rate": 20 }] }
+
+<> 2019-03-24T015736.200.json
+
+###
+
+POST http://localhost:8080/ws/benefit
+Accept: */*
+Content-Type: application/json
+
+{"source": "1234567890" ,"amount": 1000}
+
+<> 2019-03-24T014903.500.json
+
+###
+
+POST http://localhost:8080/ws/benefit
+Accept: */*
+Content-Type: application/json
+
+{"source": "1234567890" ,"amount": 1000}
+
+<> 2019-03-24T014637.500.json
+
+###
+
