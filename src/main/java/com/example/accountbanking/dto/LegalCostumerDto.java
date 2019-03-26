@@ -1,26 +1,16 @@
-package com.example.accountbanking.entity;
+package com.example.accountbanking.dto;
 
 
 
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import javax.persistence.*;
 import java.util.Date;
 
 
-@Entity
-@Inheritance
-public class LegalCostumer extends Costumer {
+public class LegalCostumerDto extends CostumerDto {
 
-    @Id
-    @GeneratedValue
     private Long id;
     private String companyNumber;
     private String companyTpe;
-    @DateTimeFormat
     private Date registrationDate;
-    @Version
     private Integer version;
     private Integer isDeleted;
 
@@ -58,15 +48,13 @@ public class LegalCostumer extends Costumer {
         this.registrationDate = registrationDate;
     }
 
-    public Integer getIsDeleted() {
+    public Integer getDeleted() {
         return isDeleted;
     }
 
-    public void setIsDeleted(Integer isDeleted) {
-        this.isDeleted = isDeleted;
+    public void setDeleted(Integer deleted) {
+        isDeleted = deleted;
     }
-
-
 
     public Integer getVersion() {
         return version;
@@ -76,3 +64,4 @@ public class LegalCostumer extends Costumer {
         this.version = version;
     }
 }
+

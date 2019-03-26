@@ -1,25 +1,14 @@
-package com.example.accountbanking.entity;
+package com.example.accountbanking.dto;
 
-import com.example.accountbanking.dto.Gender;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.*;
 import java.util.Date;
 
+public class RealCostumerDto extends CostumerDto{
 
-@Entity
-@Inheritance
-public class RealCostumer extends Costumer {
-
-    @Id
-    @GeneratedValue
     private Long id;
     private Gender gender;
-
-    @DateTimeFormat
     private Date birthDate;
     private String nationalCode;
-    @Version
     private Integer version;
     private Integer isDeleted;
 
@@ -73,5 +62,3 @@ public class RealCostumer extends Costumer {
         this.version = version;
     }
 }
-
-

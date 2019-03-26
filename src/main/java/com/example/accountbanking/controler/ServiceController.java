@@ -179,7 +179,7 @@ public class ServiceController {
             if (account.getAccountNumber().length() < 16 && account.getAccountNumber().length() > 19)
                 return new ResponseDto(ResponseStatus.Error, "", "", new ResponseException("شماره کارت اشتباه می باشد"));
         }
-        legalCostumer.setDeleted(false);
+        legalCostumer.setIsDeleted(1);
         legalCostumerDao.save(legalCostumer);
         return new ResponseDto(ResponseStatus.Ok, legalCostumer.getCompanyNumber(), "اطلاعات ذخیره شد.", null);
     }
@@ -192,7 +192,7 @@ public class ServiceController {
             return new ResponseDto(ResponseStatus.Error, "", "", new ResponseException("اطلاعات کامل نمی باشد"));
         if (realCostumer.getNationalCode().length() < 10)
             return new ResponseDto(ResponseStatus.Error, "", "", new ResponseException("کد ملی اشتباه می باشد"));
-        realCostumer.setDeleted(false);
+        realCostumer.setIsDeleted(1);
         realCostumerDao.save(realCostumer);
 
         return new ResponseDto(ResponseStatus.Ok, "", "اطلاعات ذخیره شد.", null);
@@ -254,7 +254,7 @@ public class ServiceController {
     @RequestMapping(value = "/ws/deleteReal", method = RequestMethod.POST)
     @Transactional(rollbackOn = Exception.class)
     public ResponseDto<String> deleteReal(@RequestBody RealCostumer realCostumer) {
-        realCostumer.setDeleted(true);
+        realCostumer.setIsDeleted(0);
         realCostumerDao.save(realCostumer);
         return new ResponseDto(ResponseStatus.Ok, "", "حذف با موفقیت انجام شد", null);
 
@@ -263,7 +263,7 @@ public class ServiceController {
     @RequestMapping(value = "/ws/deleteLegal", method = RequestMethod.POST)
     @Transactional(rollbackOn = Exception.class)
     public ResponseDto<String> deleteLegal(@RequestBody LegalCostumer legalCostumer) {
-        legalCostumer.setDeleted(true);
+        legalCostumer.setIsDeleted(0);
         legalCostumerDao.save(legalCostumer);
         return new ResponseDto(ResponseStatus.Ok, "", "حذف با موفقیت انجام شد", null);
 
