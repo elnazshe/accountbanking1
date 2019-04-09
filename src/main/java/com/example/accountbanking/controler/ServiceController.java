@@ -10,6 +10,8 @@ import com.example.accountbanking.entity.Account;
 import com.example.accountbanking.entity.AccountTransaction;
 import com.example.accountbanking.entity.LegalCostumer;
 import com.example.accountbanking.entity.RealCostumer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +25,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 
+
 @RestController
 public class ServiceController {
 
@@ -31,6 +34,7 @@ public class ServiceController {
     private RealCostumerDao realCostumerDao;
     private AccountDao accountDao;
     private TransactionDao transactionDao;
+    private  static final Logger log= LogManager.getLogger();
 
     public ServiceController(LegalCostumerDao legalCostumerDao, RealCostumerDao realCostumerDao, AccountDao accountDao, TransactionDao transactionDao) {
         this.legalCostumerDao = legalCostumerDao;
@@ -74,7 +78,9 @@ public class ServiceController {
 
         AccountTransaction  accountTransaction=new AccountTransaction();
         List<AccountTransaction>   accountTransactionList=new ArrayList<>();
+        log.info(("call get account"));
         Account accountSource = accountDao.getAccountByNumber(moneyTransferDto.getSource());
+
         if (Objects.isNull((accountSource)) || Objects.isNull(moneyTransferDto.getAmount()))
         return new ResponseDto(ResponseStatus.Error, "", "",
                 new ResponseException("اطلاعات کامل نمی باشد"));
@@ -222,10 +228,11 @@ public class ServiceController {
 
     @RequestMapping(value = "/ws/findRealByNationalCode", method = RequestMethod.POST)
     @Transactional(rollbackOn = Exception.class)
-    public ResponseDto<RealCostumer> findRealByNationalCode(@RequestParam String nationalCode) {
+    public ResponseDto<RealCostumer> findRealByNationalCode(@RequestParam String nationalCode) throws Exception{
         RealCostumer realCostumer = realCostumerDao.findRealByNationalCode(nationalCode);
         if (Objects.isNull(realCostumer))
-            return new ResponseDto(ResponseStatus.Error, "", "", new ResponseException("اطلاعات یافت نشد"));
+           // return new ResponseDto(ResponseStatus.Error, "", "", new ResponseException("اطلاعات یافت نشد"));
+            throw new Exception("اطلاعات یافت نشد");
         return new ResponseDto(ResponseStatus.Ok, realCostumer, "", null);
 
     }
@@ -245,7 +252,8 @@ public class ServiceController {
     public ResponseDto<Account> getAccountByNumber(@RequestParam String accountNumber) {
         Account account = accountDao.getAccountByNumber(accountNumber);
         if (Objects.isNull(account))
-            return new ResponseDto(ResponseStatus.Error, "", "", new ResponseException("اطلاعات یافت نشد"));
+            return new ResponseDto(ResponseStatus.Error, "", "",
+                    new ResponseException("اطلاعات یافت نشد"));
         return new ResponseDto(ResponseStatus.Ok, account, "", null);
 
     }
@@ -253,11 +261,15 @@ public class ServiceController {
 
     @RequestMapping(value = "/ws/deleteReal", method = RequestMethod.POST)
     @Transactional(rollbackOn = Exception.class)
-    public ResponseDto<String> deleteReal(@RequestBody RealCostumer realCostumer) {
+    public ResponseDto<String> deleteReal(@RequestBody RealCostumer realCostumer) throws Exception {
         realCostumer.setIsDeleted(0);
-        realCostumerDao.save(realCostumer);
-        return new ResponseDto(ResponseStatus.Ok, "", "حذف با موفقیت انجام شد", null);
+        try {
+            realCostumerDao.save(realCostumer);
+            return new ResponseDto(ResponseStatus.Ok, "", "حذف با موفقیت انجام شد", null);
 
+        }catch ( Throwable e){
+            throw new Exception("no delete",e);
+        }
     }
 
     @RequestMapping(value = "/ws/deleteLegal", method = RequestMethod.POST)

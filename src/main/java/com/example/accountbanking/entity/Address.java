@@ -2,10 +2,13 @@ package com.example.accountbanking.entity;
 
 
 import com.example.accountbanking.dto.AddressType;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 
-@Entity
+@Table(name = "ELN_ADDRESS")
+@Entity()
+@EntityListeners(AuditingEntityListener.class)
 public class Address {
 
     @Id

@@ -1,13 +1,16 @@
 package com.example.accountbanking.entity;
 
 import com.example.accountbanking.dto.Gender;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
 
 
-@Entity
+@Table(name = "ELN_REALCOSTUMER")
+@Entity()
+@EntityListeners(AuditingEntityListener.class)
 @Inheritance
 public class RealCostumer extends Costumer {
 

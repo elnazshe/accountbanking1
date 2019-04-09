@@ -9,7 +9,9 @@ import javax.persistence.*;
 import java.util.Date;
 
 
-@Entity
+@Table(name = "ELN_LEGALCOSTUMER")
+@Entity()
+@EntityListeners(AuditingEntityListener.class)
 @Inheritance
 public class LegalCostumer extends Costumer {
 

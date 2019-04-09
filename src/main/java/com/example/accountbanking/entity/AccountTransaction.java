@@ -2,14 +2,15 @@ package com.example.accountbanking.entity;
 
 
 import com.example.accountbanking.dto.AccountTransferType;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
-@Entity
+@Table(name = "ELN_ACCOUNTTRANSACTION")
+@Entity()
+@EntityListeners(AuditingEntityListener.class)
 
 public class AccountTransaction {
     @Id

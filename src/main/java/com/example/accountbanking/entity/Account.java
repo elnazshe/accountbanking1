@@ -2,12 +2,15 @@ package com.example.accountbanking.entity;
 
 
 import com.example.accountbanking.dto.AccountType;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
 
-@Entity
+@Table(name = "ELN_ACCOUNT")
+@Entity()
+@EntityListeners(AuditingEntityListener.class)
 public class Account {
     @Id
     @GeneratedValue
